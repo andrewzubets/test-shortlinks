@@ -11,11 +11,21 @@ class ShortLinkService
     public const RANDOM_BYTES = 32;
 
     public function getFullUrl(string $shortUrl): string {
+        return $this->getShortLink($shortUrl)->url;
+    }
+
+    protected function getShortLink(string $shortUrl): ShortLink {
         $shortLinkModel = ShortLink::where('short_id', $shortUrl)->first();
         if(empty($shortLinkModel)){
             throw new ModelNotFoundException('Короткая ссылка не найдена');
         }
-        return $shortLinkModel->url;
+        return $shortLinkModel;
+    }
+
+    public function countUrlCount(string $shortUrl): void {
+        $shortLink = $this->getShortLink($shortUrl);
+        $shortLink->call_count = $shortLink->call_count + 1;
+        $shortLink->save();
     }
 
     public function getShortUrl(string $fullUrl): string {
@@ -28,6 +38,8 @@ class ShortLinkService
         }
         return $shortLinkModel->short_id;
     }
+
+
 
     /**
      * @throws \Exception

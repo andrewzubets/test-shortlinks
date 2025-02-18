@@ -18,16 +18,18 @@ class ShortLinkController extends Controller
     public function create(ShortLinkRequest $shortLinkRequest, ShortLinkService $linkService): View {
         $urlInput = $shortLinkRequest->get('url_input');
         $urlShortLink = $linkService->getShortUrl($urlInput);
+
         return view('shortlink.index', [
             'urlShortLink' => url('/s/' . $urlShortLink),
             'urlInput' => $urlInput
         ]);
     }
 
-    public function followShortLink(string $shortLink, ShortLinkService $linkService): RedirectResponse
+    public function followShortLink(string $shortId, ShortLinkService $linkService): RedirectResponse
     {
         try {
-            $fullUrl = $linkService->getFullUrl($shortLink);
+            $fullUrl = $linkService->getFullUrl($shortId);
+            $linkService->countUrlCount($shortId);
 
             return redirect($fullUrl);
         }
