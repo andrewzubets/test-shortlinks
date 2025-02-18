@@ -22,7 +22,8 @@ class ShortLinkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'url_input' => ['required', 'regex:/^.+\..+$/'],
+            'url' => ['required', 'regex:/^(http\:\/\/|https\:\/\/).+\..+$/'],
+            'short_id' => 'regex:/^(|.+)$/'
         ];
     }
 }

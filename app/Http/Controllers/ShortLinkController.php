@@ -2,39 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ShortLinkRequest;
+use App\Http\Requests\UpdateShortLinkRequest;
+use App\Models\ShortLink;
 use App\Services\ShortLinkService;
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class ShortLinkController extends Controller
 {
-
-    public function index(): View {
-        return view('shortlink.index', ['urlInput' => '']);
-    }
-
-    public function create(ShortLinkRequest $shortLinkRequest, ShortLinkService $linkService): View {
-        $urlInput = $shortLinkRequest->get('url_input');
-        $urlShortLink = $linkService->getShortUrl($urlInput);
-
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $shortLinks = ShortLink::cursorPaginate(10);
         return view('shortlink.index', [
-            'urlShortLink' => url('/s/' . $urlShortLink),
-            'urlInput' => $urlInput
+            'shortLinks' => $shortLinks,
+            'message' => $this->getStatusMessage($request->get('messageId')),
         ]);
     }
 
-    public function followShortLink(string $shortId, ShortLinkService $linkService): RedirectResponse
-    {
-        try {
-            $fullUrl = $linkService->getFullUrl($shortId);
-            $linkService->countUrlCount($shortId);
+    protected function getStatusMessage(?string $messageId): ?array {
+        return match ($messageId) {
+            'record-updated' => [
+                'type' => 'success',
+                'message' => 'Ссылка обновлена',
+            ],
+            'record-destroyed' => [
+                'type' => 'warning',
+                'message' => 'Ссылка удалена',
+            ],
+            default => null
+        };
+    }
 
-            return redirect($fullUrl);
-        }
-        catch (\Exception $exception){
-            return redirect('/');
-        }
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(ShortLink $shortLink)
+    {
+        return view('shortlink.edit', ['shortLink' => $shortLink]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateShortLinkRequest $request, ShortLinkService $linkService, ShortLink $shortLink)
+    {
+        $newUrl = $request->get('url');
+        $newShortId = $request->get('short_id');
+        $linkService->updateShortLink($shortLink, $newUrl, $newShortId);
+        return redirect(route('shortlink.index').'?messageId=record-updated');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(ShortLink $shortLink)
+    {
+        $shortLink->delete();
+
+        return redirect(route('shortlink.index').'?messageId=record-destroyed');
     }
 }

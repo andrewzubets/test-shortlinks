@@ -28,7 +28,7 @@ class ShortLinkService
         $shortLink->save();
     }
 
-    public function getShortUrl(string $fullUrl): string {
+    public function getShortUrlId(string $fullUrl): string {
         $shortLinkModel = ShortLink::where('url', $fullUrl)->first();
         if(empty($shortLinkModel)){
             $shortLinkModel = new ShortLink();
@@ -57,5 +57,12 @@ class ShortLinkService
             0,
             self::SHORT_URL_LENGTH
         );
+    }
+
+    public function updateShortLink(ShortLink $shortLink, string $newUrl, string $newShortId): void
+    {
+        $shortLink->url = $newUrl;
+        $shortLink->short_id = $newShortId;
+        $shortLink->save();
     }
 }
