@@ -1,0 +1,10 @@
+@import 'bootstrap/scss/bootstrap';
+
+@media (max-width: 767.98px) {
+    .flex-md-max-column {
+        flex-direction: column;
+    }
+    .w100-md-max{
+        width: 100%;
+    }
+}
