@@ -31,7 +31,7 @@ class IndexController extends Controller
      */
     public function create(CreateShortLinkRequest $shortLinkRequest, ShortLinkService $linkService): View {
         $urlInput = $shortLinkRequest->get('url');
-        $shortUrlId = $linkService->getShortUrlId($urlInput);
+        $shortUrlId = $linkService->getOrCreateShortUrlId($urlInput);
 
         return view('index.create_shortlink', [
             'shortUrlId' => $shortUrlId,

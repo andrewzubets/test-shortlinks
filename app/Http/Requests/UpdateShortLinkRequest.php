@@ -25,7 +25,8 @@ class UpdateShortLinkRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->request->get('id');
+        $id = $this->getShortLinkId();
+
         return [
             'url' => [
                 'required',
@@ -38,5 +39,14 @@ class UpdateShortLinkRequest extends FormRequest
                 Rule::unique('short_links', 'short_id')->ignore($id)
             ]
         ];
+    }
+
+    private function getShortLinkId(): ?int
+    {
+        $id = $this->request->get('id');
+        if(!empty($id)){
+            return $id;
+        }
+        return \request()->route()->parameter('shortLink')?->id;
     }
 }

@@ -13,13 +13,13 @@
         <div class="my-3">
             <x-short-link-update-message />
             @foreach($shortLinks as $shortLink)
-                <div class="card my-3" >
+                <div class="card my-3">
                     <div class="card-body">
                         <h5 class="card-title">Ссылка: {{$shortLink->url}}</h5>
                         <ul>
                             <li>
                                 Короткая: <a href="{{ route('index.follow_shortlink', ['shortId' => $shortLink->short_id] ) }}" target="_blank">
-                                    {{ route('index.follow_shortlink', ['shortId' => $shortLink->short_id] ) }}
+                                    {{ $shortLink->short_url }}
                                 </a>
                             </li>
                             <li>

@@ -59,14 +59,14 @@ class ShortLinkService
     }
 
     /**
-     * Gets short url id or creates it.
+     * Gets short link or creates it.
      *
      * @param string $fullUrl
      *   Full url to get short url id from.
      *
      * @throws Exception
      */
-    public function getShortUrlId(string $fullUrl): string {
+    public function getOrCreateShortLink(string $fullUrl): ShortLink {
         $shortLinkModel = ShortLink::where('url', $fullUrl)->first();
         if(empty($shortLinkModel)){
             $shortLinkModel = new ShortLink();
@@ -75,7 +75,19 @@ class ShortLinkService
             $shortLinkModel->save();
         }
 
-        return $shortLinkModel->short_id;
+        return $shortLinkModel;
+    }
+
+    /**
+     * Gets short url id or creates it.
+     *
+     * @param string $fullUrl
+     *   Full url to get short url id from.
+     *
+     * @throws Exception
+     */
+    public function getOrCreateShortUrlId(string $fullUrl): string {
+        return $this->getOrCreateShortLink($fullUrl)->short_id;
     }
 
     /**
