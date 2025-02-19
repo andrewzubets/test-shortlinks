@@ -11,9 +11,7 @@
         <div class="my-3">Нет ссылок</div>
     @else
         <div class="my-3">
-            @if(!empty($message))
-                <div class="my-3 alert alert-{{$message['type']}}">{{$message['message']}}</div>
-            @endif
+            <x-short-link-update-message />
             @foreach($shortLinks as $shortLink)
                 <div class="card my-3" >
                     <div class="card-body">

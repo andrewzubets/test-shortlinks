@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\ShortLink;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Request for update request processing.
+ */
 class UpdateShortLinkRequest extends FormRequest
 {
     /**
@@ -19,7 +21,7 @@ class UpdateShortLinkRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array>
      */
     public function rules(): array
     {
