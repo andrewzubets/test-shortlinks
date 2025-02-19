@@ -1,66 +1,79 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Тестовое задание по коротким ссылкам
 
-## About Laravel
+Предоставляет интерфейс для создания коротких пользовательских ссылок.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Установка
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Приложение устанавливается как обычное приложение на Laravel Framework:
+1. Выполнить установку ядра с помощью менеджера пакетов composer. В консоле выполнить команду "composer install".
+2. Скопировать и переименовать ".env.example" в ".env".
+3. Сгенерировать ключ приложения, выполнив в консоли комманду "php artisan key:generate".
+4. Создать пустой файл базы данных "database.sqlite" в каталоге database или поменять подключение на другую базу данных установленную на сервере в файле .env.
+5. Выполнить команду по созданию структуры базы данных в консоли: "php artisan migrate".
+6. Выполнить установку nodejs библиотек для сборки фронтенд файлов(js,css): "npm install".
+7. Собрать фронтенд файлы вызвав в консоли команду "npm run build".
+8. Настроить виртуальный хост в настройках веб сервера на каталог public. Или вызвать в консоли поднятие веб сервера laravel с помощью команды "php artisan serve".
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Структура
+Главная страница: 
+ - страница создания ссылок и их копирования.
 
-## Learning Laravel
+Главная страница > Список ссылок:
+ - страница списка всех ссылок и статистики переходов.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Главная страница > Список ссылок > Страница редактирования:
+ - страница изменения ссылки и удаления
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Управление ссылками
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- На главной странице доступна форма для создания короткой ссылки. Вводится полный урл и если он есть в базе то возращается существующий.
+- Для просмотра списка всех ссылок и статистике по переходам, пользователь переходит по ссылке на главной странице.
+- Изменение ссылок и их удаление возможно на странице редактирования ссылки после перехода со списка ссылок.
+- В случае если пользователь хочет задать свой короткий Url то ему необходимо сначала создать ссылку а затем её поменять на странице редактирования.
 
-## Laravel Sponsors
+## API Reference
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+#### Получить все ссылки
 
-### Premium Partners
+```http
+  GET /api/short-link
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+#### Получить информацию о ссылке
 
-## Contributing
+```http
+  GET /api/short-link/{id}
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Параметр | Тип      | Описание       |
+|:---------|:---------|:---------------|
+| `id`     | `string` | **Обязателен** |
 
-## Code of Conduct
+#### Создать ссылку
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```http
+  POST /api/short-link
+```
 
-## Security Vulnerabilities
+| Параметр | Тип      | Описание                          |
+|:---------|:---------|:----------------------------------|
+| `url`    | `string` | **Обязателен в теле** Полный url. |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### Изменить ссылку
 
-## License
+```http
+  PUT /api/short-link/{id}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Параметр   | Тип      | Описание                            |
+|:-----------|:---------|:------------------------------------|
+| `short_id` | `string` | **Обязателен** Часть короткого url. |
+| `url`      | `string` | **Обязателен** Полный url.          |
+
+#### Удалить ссылку
+
+```http
+  DELETE /api/short-link/{id}
+```
+
